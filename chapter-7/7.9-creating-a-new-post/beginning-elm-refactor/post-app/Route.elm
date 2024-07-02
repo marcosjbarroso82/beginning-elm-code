@@ -28,8 +28,8 @@ matchRoute =
     oneOf
         [ map Posts top
         , map Posts (s "posts")
-        , map Post (s "posts" </> Post.idParser)
         , map NewPost (s "posts" </> s "new")
+        , map Post (s "posts" </> Post.idParser)
         ]
 
 
@@ -48,8 +48,8 @@ routeToString route =
         Posts ->
             "/posts"
 
+        NewPost ->
+            "/posts/new"
         Post postId ->
             "/posts/" ++ Post.idToString postId
 
-        NewPost ->
-            "/posts/new"

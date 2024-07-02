@@ -25,7 +25,7 @@ type alias Post =
 
 
 type PostId
-    = PostId Int
+    = PostId String
 
 
 postsDecoder : Decoder (List Post)
@@ -44,19 +44,21 @@ postDecoder =
 
 idDecoder : Decoder PostId
 idDecoder =
-    Decode.map PostId int
+    Decode.map PostId string
 
 
 idToString : PostId -> String
-idToString (PostId id) =
-    String.fromInt id
+idToString (PostId id) = id
 
 
 idParser : Parser (PostId -> a) a
 idParser =
     custom "POSTID" <|
-        \postId ->
-            Maybe.map PostId (String.toInt postId)
+        \postIdString ->
+            if postIdString == "" then
+                Nothing
+            else
+                Just (PostId postIdString)
 
 
 postEncoder : Post -> Encode.Value
@@ -80,7 +82,7 @@ newPostEncoder post =
 
 encodeId : PostId -> Encode.Value
 encodeId (PostId id) =
-    Encode.int id
+    Encode.string id
 
 
 emptyPost : Post
@@ -94,4 +96,4 @@ emptyPost =
 
 emptyPostId : PostId
 emptyPostId =
-    PostId -1
+    PostId "-1"
